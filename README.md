@@ -2,7 +2,7 @@
 
 A clone of the popular word game [Wordle](https://www.nytimes.com/games/wordle/index.html), built from scratch using **React**. The application allows players to guess a hidden 5-letter word in a maximum of 6 attempts, providing classic color-coded hints after each guess.
 
-🌍 **[Live Version Link (Replace with your link)](#)**
+🌍 **[Live Version Link](https://pieter0100.github.io/wordleClone/)**
 
 ---
 
