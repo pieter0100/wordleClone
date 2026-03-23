@@ -1,8 +1,11 @@
 import './App.css'
 import {useEffect, useState} from "react";
 
+const DELETE = 1
+const SET = 0
+
 function App() {
-  const word = "level"
+  const word = "level".toUpperCase()
 
   const getInitialTable = () => {
     return Array.from({ length: 6 }, () =>
@@ -19,13 +22,18 @@ function App() {
     col: 0
   })
 
-  const setKeyInTable = (row, col, key) => {
+  const setKeyInTable = (row, col, key, action) => {
     setTable(prevState =>{
       const newTable = [...prevState]
 
       newTable[row] = [...newTable[row]]
 
       newTable[row][col].letter = key
+
+      if (action === DELETE)
+        newTable[row][col].status = "empty"
+      else if (action === SET)
+        newTable[row][col].status = "colWithLetter"
 
       return newTable
     })
@@ -80,6 +88,17 @@ function App() {
           return newTable
         })
       }
+      else if (word[i] !== table[tableIndex.row][i].letter && !copiedWord.includes(table[tableIndex.row][i].letter)){
+        setTable(prevState =>{
+          const newTable = [...prevState]
+
+          newTable[tableIndex.row] = [...newTable[tableIndex.row]]
+
+          newTable[tableIndex.row][i].status = "colNotGood"
+
+          return newTable
+        })
+      }
     }
 
     if (goodLetterAmount === 5) {
@@ -109,7 +128,7 @@ function App() {
       }
       else if (event.key === "Backspace") {
         if (tableIndex.col > 0) {
-          setKeyInTable(tableIndex.row, tableIndex.col - 1, "")
+          setKeyInTable(tableIndex.row, tableIndex.col - 1, "", DELETE)
 
           setTableIndex(prevState => {
             return {
@@ -120,15 +139,17 @@ function App() {
         }
       }
       else {
-        if (tableIndex.col < 5) {
-          setKeyInTable(tableIndex.row, tableIndex.col, event.key)
+        if (/^[a-zA-Z]$/.test(event.key)) {
+          if (tableIndex.col < 5) {
+            setKeyInTable(tableIndex.row, tableIndex.col, event.key.toUpperCase(), SET)
 
-          setTableIndex(prevState => {
-            return {
-              ...prevState,
-              col: prevState.col + 1
-            }
-          })
+            setTableIndex(prevState => {
+              return {
+                ...prevState,
+                col: prevState.col + 1
+              }
+            })
+          }
         }
       }
     }
